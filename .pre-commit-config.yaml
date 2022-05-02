@@ -1,0 +1,51 @@
+exclude: ^$
+fail_fast: false
+repos:
+- repo: https://github.com/psf/black
+  rev: 21.6b0
+  hooks:
+  - id: black
+
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.1.0
+  hooks:
+  - id: codespell
+    exclude_types: [json]
+    args: [-L connexion]
+
+- repo: https://github.com/doublify/pre-commit-rust
+  rev: v1.0
+  hooks:
+  - id: cargo-check
+  - id: fmt
+    # args: [--verbose, --edition, '2018', --]
+    args: [--verbose, --]
+
+    # - repo: local
+    #   hooks:
+    #     - id: coverage-local
+    #       name: coverage
+    #       always_run: true
+    #       entry: ./scripts/coverage.sh 100
+    #       language: script
+    #       pass_filenames: false
+
+- repo: https://github.com/marco-c/taskcluster_yml_validator
+  rev: v0.0.7
+  hooks:
+  - id: taskcluster_yml
+
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.1.0
+  hooks:
+  - id: pretty-format-rust
+    args: [--autofix]
+  - id: pretty-format-toml
+    args: [--autofix]
+  - id: pretty-format-yaml
+    args: [--autofix, --indent, '2']
+
+- repo: meta
+  hooks:
+  - id: check-useless-excludes
+default_stages: [commit, push]

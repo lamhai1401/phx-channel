@@ -1,0 +1,11 @@
+{
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true,
+    "explorer.openEditors.visible": 0,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "rust-client.trace.server": "verbose",
+    "rust.racer_completion": true,
+    // "terminal.integrated.shellArgs.linux": ["-l"]
+    // "rust.rustfmt_path": "/Users/lamhai/rust/wss",
+}
