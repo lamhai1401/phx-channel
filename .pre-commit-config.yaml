@@ -6,12 +6,12 @@ repos:
   hooks:
   - id: black
 
-- repo: https://github.com/codespell-project/codespell
-  rev: v2.1.0
-  hooks:
-  - id: codespell
-    exclude_types: [json]
-    args: [-L connexion]
+# - repo: https://github.com/codespell-project/codespell
+#   rev: v2.1.0
+#   hooks:
+#   - id: codespell
+#     exclude_types: [json]
+#     args: [-L connexion]
 
 - repo: https://github.com/doublify/pre-commit-rust
   rev: v1.0

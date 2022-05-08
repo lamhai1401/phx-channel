@@ -12,11 +12,11 @@
         "args": [
           "build",
           // "--lib",
-          "--bin=phxchannel",
+          "--bin=phx-channel",
           "--package=phx-channel"
         ],
         "filter": {
-          "name": "phxchannel",
+          "name": "phx-channel",
           "kind": "bin"
         }
       },
