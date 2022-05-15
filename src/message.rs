@@ -2,7 +2,7 @@ use serde_json;
 use websocket::result::WebSocketResult;
 use websocket::OwnedMessage;
 
-use super::{errors::PhxError, event::EventKind};
+use super::{cst::*, errors::PhxError, event::EventKind};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PhoenixMessage {
@@ -11,8 +11,8 @@ pub struct PhoenixMessage {
     join_ref: Option<u32>,
 
     #[serde(alias = "message", alias = "message_ref")]
-    #[serde(rename = "message")]
-    message_ref: u32,
+    #[serde(rename = "ref")]
+    message_ref: usize,
 
     #[serde(alias = "topic", alias = "topic")]
     #[serde(rename = "topic")]
@@ -25,6 +25,25 @@ pub struct PhoenixMessage {
     #[serde(alias = "payload", alias = "payload")]
     #[serde(rename = "payload")]
     payload: serde_json::Value,
+}
+
+impl PhoenixMessage {
+    pub fn new(event: &str, topic: String, message_ref: usize, payload: serde_json::Value) -> Self {
+        let evt = match event {
+            CHAN_REPLY => EventKind::Reply,
+            CHAN_LEAVE => EventKind::Leave,
+            CHAN_JOIN => EventKind::Join,
+            CHAN_CLOSE => EventKind::Close,
+            _ => EventKind::Error,
+        };
+        PhoenixMessage {
+            join_ref: None,
+            event: evt,
+            topic,
+            message_ref,
+            payload,
+        }
+    }
 }
 
 #[derive(Debug)]
