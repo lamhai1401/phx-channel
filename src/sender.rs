@@ -1,16 +1,15 @@
 use serde_json::{json, Value};
 use slog;
 
-use std::sync::atomic::AtomicUsize;
 use websocket::sender::Writer;
 use websocket::stream::sync::TcpStream;
 use websocket::OwnedMessage;
 
 use super::{
     counter::{AtomicCounter, RelaxedCounter},
-    cst::CHAN_JOIN,
-    errors::{Error, PhxError},
-    message::{Message, PhoenixMessage},
+    cst::{CHAN_JOIN, HEART_BEAT},
+    errors::PhxError,
+    message::PhoenixMessage,
 };
 
 pub struct Sender {
@@ -30,6 +29,7 @@ impl Sender {
         }
     }
 
+    // join return join ref
     pub fn join(&mut self, channel: &str) -> PhxError<u32> {
         self.join_ref += 1;
         let phx_message = json![PhoenixMessage::new(
@@ -44,5 +44,24 @@ impl Sender {
         let message = OwnedMessage::Text(phx_message);
         self.writer.send_message(&message)?;
         return Ok(self.join_ref);
+    }
+
+    // heartbeat return msg ref
+    pub fn heartbeat(&mut self) -> PhxError<usize> {
+        let count = self.message_ref.inc();
+        let phx_message = json![PhoenixMessage::new(
+            HEART_BEAT,
+            "phoenix".to_string(),
+            count.clone(),
+            Value::Null,
+        )]
+        .to_string();
+
+        debug!(self.logger, "heartbeat()"; "payload" => &phx_message);
+
+        let message = OwnedMessage::Text(phx_message);
+
+        self.writer.send_message(&message)?;
+        return Ok(count);
     }
 }

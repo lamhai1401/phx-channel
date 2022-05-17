@@ -5,3 +5,4 @@ pub const CHAN_ERROR: &'static str = "phx_error";
 pub const CHAN_REPLY: &'static str = "phx_reply";
 pub const CHAN_JOIN: &'static str = "phx_join";
 pub const CHAN_LEAVE: &'static str = "phx_leave";
+pub const HEART_BEAT: &'static str = "heartbeat";
