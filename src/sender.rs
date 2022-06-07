@@ -62,6 +62,6 @@ impl Sender {
         let message = OwnedMessage::Text(phx_message);
 
         self.writer.send_message(&message)?;
-        return Ok(count);
+        Ok(count)
     }
 }
