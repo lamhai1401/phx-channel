@@ -41,9 +41,9 @@ pub fn connect(
 
     // convert the params to a uri component string
     let mut params_uri: String = "".to_owned();
-    for (k, v) in params {
-        params_uri.push_str(&format!("&{}={}", k, v));
-    }
+    // for (k, v) in params {
+    //     params_uri.push_str(&format!("&{}={}", k, v));
+    // }
 
     let addr = format!("{}{}", url, params_uri);
     let mut client_builder = ClientBuilder::new(&addr)?;
@@ -93,7 +93,7 @@ impl Client {
     fn keepalive(sender_ref: Arc<Mutex<Sender>>) -> task::JoinHandle<()> {
         task::spawn(async move {
             'v1: loop {
-                sleep(Duration::from_millis(100)).await;
+                sleep(Duration::from_millis(5000)).await;
                 // if the mutex is poisoned then the whole thread wont work
                 let mut sender = sender_ref.lock().unwrap();
                 match sender.heartbeat() {

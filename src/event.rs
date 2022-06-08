@@ -10,6 +10,7 @@ pub enum EventKind {
     Join,
     Leave,
     Reply,
+    HeartBeat,
 }
 
 impl Serialize for EventKind {
@@ -23,6 +24,7 @@ impl Serialize for EventKind {
             EventKind::Join => CHAN_JOIN,
             EventKind::Leave => CHAN_LEAVE,
             EventKind::Reply => CHAN_REPLY,
+            EventKind::HeartBeat => HEART_BEAT,
         };
 
         serializer.serialize_str(kind)
@@ -53,6 +55,7 @@ impl<'de> Deserialize<'de> for EventKind {
                     CHAN_JOIN => Ok(EventKind::Join),
                     CHAN_LEAVE => Ok(EventKind::Leave),
                     CHAN_REPLY => Ok(EventKind::Reply),
+                    HEART_BEAT => Ok(EventKind::HeartBeat),
                     s => Err(E::invalid_value(Unexpected::Str(s), &self)),
                 }
             }

@@ -34,6 +34,7 @@ impl PhoenixMessage {
             CHAN_LEAVE => EventKind::Leave,
             CHAN_JOIN => EventKind::Join,
             CHAN_CLOSE => EventKind::Close,
+            HEART_BEAT => EventKind::HeartBeat,
             _ => EventKind::Error,
         };
         PhoenixMessage {
