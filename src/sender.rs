@@ -7,7 +7,7 @@ use websocket::OwnedMessage;
 
 use super::{
     counter::{AtomicCounter, RelaxedCounter},
-    cst::{CHAN_JOIN, HEART_BEAT},
+    cst::{CHAN_JOIN, CHAN_LEAVE, HEART_BEAT},
     errors::PhxError,
     message::PhoenixMessage,
 };
@@ -58,6 +58,24 @@ impl Sender {
         .to_string();
 
         debug!(self.logger, "heartbeat()"; "payload" => &phx_message);
+
+        let message = OwnedMessage::Text(phx_message);
+
+        self.writer.send_message(&message)?;
+        Ok(count)
+    }
+
+    pub fn leave(&mut self, channel: &str) -> PhxError<usize> {
+        let count = self.message_ref.inc();
+        let phx_message = json![PhoenixMessage::new(
+            CHAN_LEAVE,
+            channel.to_owned(),
+            count.clone(),
+            Value::Null,
+        )]
+        .to_string();
+
+        debug!(self.logger, "leave()"; "payload" => &phx_message);
 
         let message = OwnedMessage::Text(phx_message);
 

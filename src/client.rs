@@ -132,10 +132,14 @@ impl Client {
         }
     }
 
-    // pub fn join_threads(self) {
-    // self.message_processor_handle.join()?;
-    // Ok(())
-    // }
+    pub fn leave(&self, channel: &str) -> PhxError<usize> {
+        match self.sender_ref.lock() {
+            Ok(mut sender) => Ok(sender.leave(channel)?),
+            Err(_) => Err(Error::from(ClientError::Thread(String::from(
+                "Cannot leave as sender mutex has been poisoned",
+            )))),
+        }
+    }
 }
 
 pub struct MessageIterator {
