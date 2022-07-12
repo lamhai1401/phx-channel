@@ -48,38 +48,32 @@ impl Sender {
 
     // heartbeat return msg ref
     pub fn heartbeat(&mut self) -> PhxError<usize> {
-        let count = self.message_ref.inc();
-        let phx_message = json![PhoenixMessage::new(
-            HEART_BEAT,
-            "phoenix".to_string(),
-            count.clone(),
-            Value::Null,
-        )]
-        .to_string();
-
-        debug!(self.logger, "heartbeat()"; "payload" => &phx_message);
-
-        let message = OwnedMessage::Text(phx_message);
-
-        self.writer.send_message(&message)?;
-        Ok(count)
+        let data = self.request(HEART_BEAT, "phoenix", Value::Null)?;
+        Ok(data)
     }
 
     pub fn leave(&mut self, channel: &str) -> PhxError<usize> {
+        let data = self.request(CHAN_LEAVE, channel, Value::Null)?;
+        Ok(data)
+    }
+
+    pub fn request(
+        &mut self,
+        evt: &str,
+        channel: &str,
+        payload: serde_json::Value,
+    ) -> PhxError<usize> {
         let count = self.message_ref.inc();
         let phx_message = json![PhoenixMessage::new(
-            CHAN_LEAVE,
+            evt,
             channel.to_owned(),
             count.clone(),
-            Value::Null,
+            payload,
         )]
         .to_string();
 
-        debug!(self.logger, "leave()"; "payload" => &phx_message);
-
         let message = OwnedMessage::Text(phx_message);
-
         self.writer.send_message(&message)?;
-        Ok(count)
+        return Ok(count);
     }
 }

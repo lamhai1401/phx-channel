@@ -14,15 +14,15 @@ pub struct PhoenixMessage {
     #[serde(rename = "ref")]
     message_ref: usize,
 
-    #[serde(alias = "topic", alias = "topic")]
+    #[serde(alias = "topic")]
     #[serde(rename = "topic")]
     topic: String,
 
-    #[serde(alias = "event", alias = "event")]
+    #[serde(alias = "event")]
     #[serde(rename = "event")]
     event: EventKind,
 
-    #[serde(alias = "payload", alias = "payload")]
+    #[serde(alias = "payload")]
     #[serde(rename = "payload")]
     payload: serde_json::Value,
 }
